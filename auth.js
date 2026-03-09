@@ -3,7 +3,7 @@
   var statusEl = document.getElementById('auth-status');
   var welcomeEl = document.getElementById('auth-welcome');
   var logoutBtn = document.getElementById('logout-btn');
-  var accountChipNameEl = document.getElementById('account-chip-name');
+  var authEntryLinkEl = document.getElementById('auth-entry-link');
   var profileHelloEl = document.getElementById('profile-hello');
   var profileUsernameEl = document.getElementById('profile-username');
   var profileLoginTimeEl = document.getElementById('profile-login-time');
@@ -28,15 +28,27 @@
     });
   }
 
+  function updateTopRightAuth(username) {
+    if (!authEntryLinkEl) return;
+
+    if (isAuthenticated) {
+      authEntryLinkEl.textContent = username;
+      authEntryLinkEl.href = 'profile.html';
+      authEntryLinkEl.classList.add('account-link');
+    } else {
+      authEntryLinkEl.textContent = 'Вход';
+      authEntryLinkEl.href = 'login.html';
+      authEntryLinkEl.classList.remove('account-link');
+    }
+  }
+
   function showProfileState() {
     if (profileGuestHintEl) profileGuestHintEl.hidden = isAuthenticated;
     if (profileHelloEl) profileHelloEl.hidden = !isAuthenticated;
     if (profileListEl) profileListEl.hidden = !isAuthenticated;
   }
 
-  function updateAccountUi(username) {
-    if (accountChipNameEl) accountChipNameEl.textContent = username || 'Гость';
-
+  function updateProfile(username) {
     if (profileHelloEl) profileHelloEl.textContent = 'Привет, ' + username + '!';
     if (profileUsernameEl) profileUsernameEl.textContent = username;
     if (profileLoginTimeEl) profileLoginTimeEl.textContent = getDateTimeLabel();
@@ -53,7 +65,8 @@
     if (logoutBtn) logoutBtn.hidden = false;
     if (form) form.hidden = true;
 
-    updateAccountUi(username);
+    updateTopRightAuth(username);
+    updateProfile(username);
     showProfileState();
     setStatus('Авторизация успешна.', false);
   }
@@ -65,11 +78,11 @@
     if (logoutBtn) logoutBtn.hidden = true;
     if (form) form.hidden = false;
 
-    updateAccountUi('Гость');
+    updateTopRightAuth('');
     showProfileState();
 
     if (window.location.pathname.endsWith('/profile.html') || window.location.pathname === '/profile.html') {
-      setStatus('Вы гость. Войдите, чтобы увидеть данные аккаунта.', false);
+      setStatus('Вы не авторизованы. Войдите, чтобы увидеть данные аккаунта.', false);
     }
   }
 
@@ -82,9 +95,7 @@
       }
 
       var data = await res.json();
-      if (data.ok) {
-        setLoggedIn(data.username);
-      }
+      if (data.ok) setLoggedIn(data.username);
     } catch (_) {
       setStatus('Не удалось проверить сессию.', true);
     }
@@ -140,6 +151,7 @@
     });
   }
 
+  updateTopRightAuth('');
   showProfileState();
   checkSession();
 })();

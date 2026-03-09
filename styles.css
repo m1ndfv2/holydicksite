@@ -488,3 +488,17 @@ h1 span {
 .top-links .account-chip {
   margin-left: auto;
 }
+
+.auth-entry-link {
+  margin-left: auto;
+}
+
+.auth-entry-link.account-link {
+  font-weight: 700;
+  background: linear-gradient(90deg, #8fb8ff, #7dffe1);
+  color: #051021;
+}
+
+:root[data-theme='dark'] .auth-entry-link.account-link {
+  color: #081526;
+}
