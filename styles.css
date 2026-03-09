@@ -297,3 +297,40 @@ h1 span {
   padding: .85rem 1rem 1rem;
   border-top: 0;
 }
+
+:root[data-theme='dark'] {
+  --bg: #070b14;
+  --bg-soft: #0d1424;
+  --text: #f5f7ff;
+  --muted: #a9b2c7;
+  --line: rgba(255, 255, 255, 0.12);
+  --accent: #6ea8ff;
+  --accent-2: #7bffd3;
+}
+
+:root[data-theme='dark'] body {
+  background: radial-gradient(1400px 800px at 80% -10%, #21335f 0%, transparent 55%),
+              radial-gradient(1200px 600px at -10% 100%, #16382d 0%, transparent 50%),
+              linear-gradient(180deg, #0c1324 0%, var(--bg) 70%);
+}
+
+.theme-toggle {
+  cursor: pointer;
+  font: inherit;
+}
+
+:root[data-theme='dark'] .discord-chip {
+  color: #dbe7ff;
+  background: rgba(255,255,255,.04);
+}
+
+:root[data-theme='dark'] .kicker { color: #9db6ff; }
+:root[data-theme='dark'] .btn-secondary { color: #dbe5fb; background: rgba(255,255,255,.03); }
+:root[data-theme='dark'] .card { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); }
+:root[data-theme='dark'] .card-label { color: #a8c3ff; }
+:root[data-theme='dark'] .footer { color: #7d89a4; }
+:root[data-theme='dark'] .server-ip { color: #9fd4ff; }
+:root[data-theme='dark'] .rule-item { background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); }
+:root[data-theme='dark'] .rule-item summary::after { color: #dbe5fb; }
+:root[data-theme='dark'] .rule-content-inner,
+:root[data-theme='dark'] .rule-item-static h2 { border-color: rgba(255,255,255,.08); }
