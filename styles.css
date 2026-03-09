@@ -376,3 +376,64 @@ h1 span {
 :root[data-theme='dark'] .status-bad {
   color: #ff9b9b;
 }
+
+.account-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.86);
+  color: #2a3a58;
+  border-radius: 999px;
+  padding: .35rem .7rem;
+  font-weight: 600;
+}
+
+.account-chip-avatar {
+  display: inline-flex;
+  width: 1.4rem;
+  height: 1.4rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(110, 168, 255, .24);
+  font-size: .8rem;
+}
+
+.profile-card {
+  grid-column: 1 / -1;
+}
+
+.profile-hello {
+  margin: .5rem 0;
+  font-size: 1.45rem;
+}
+
+.profile-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  display: grid;
+  gap: .35rem;
+}
+
+.profile-list span {
+  font-weight: 500;
+}
+
+:root[data-theme='dark'] .account-chip {
+  color: #dbe7ff;
+  background: rgba(255,255,255,.04);
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    align-items: flex-start;
+    gap: .6rem;
+    flex-direction: column;
+  }
+
+  .top-links {
+    flex-wrap: wrap;
+  }
+}

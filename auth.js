@@ -3,6 +3,12 @@
   var statusEl = document.getElementById('auth-status');
   var welcomeEl = document.getElementById('auth-welcome');
   var logoutBtn = document.getElementById('logout-btn');
+  var accountChipEl = document.getElementById('account-chip');
+  var accountChipNameEl = document.getElementById('account-chip-name');
+  var profileCardEl = document.getElementById('profile-card');
+  var profileHelloEl = document.getElementById('profile-hello');
+  var profileUsernameEl = document.getElementById('profile-username');
+  var profileLoginTimeEl = document.getElementById('profile-login-time');
 
   if (!form || !statusEl || !welcomeEl || !logoutBtn) return;
 
@@ -11,11 +17,39 @@
     statusEl.classList.toggle('status-bad', Boolean(isError));
   }
 
+  function getDateTimeLabel() {
+    return new Date().toLocaleString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  function updateAccountUi(username) {
+    if (accountChipEl && accountChipNameEl) {
+      accountChipNameEl.textContent = username;
+      accountChipEl.hidden = false;
+    }
+
+    if (profileCardEl) profileCardEl.hidden = false;
+    if (profileHelloEl) profileHelloEl.textContent = 'Привет, ' + username + '!';
+    if (profileUsernameEl) profileUsernameEl.textContent = username;
+    if (profileLoginTimeEl) profileLoginTimeEl.textContent = getDateTimeLabel();
+  }
+
+  function hideAccountUi() {
+    if (accountChipEl) accountChipEl.hidden = true;
+    if (profileCardEl) profileCardEl.hidden = true;
+  }
+
   function setLoggedIn(username) {
     welcomeEl.textContent = 'Вы вошли как: ' + username;
     welcomeEl.hidden = false;
     logoutBtn.hidden = false;
     form.hidden = true;
+    updateAccountUi(username);
     setStatus('Авторизация успешна.', false);
   }
 
@@ -23,6 +57,7 @@
     welcomeEl.hidden = true;
     logoutBtn.hidden = true;
     form.hidden = false;
+    hideAccountUi();
   }
 
   async function checkSession() {
