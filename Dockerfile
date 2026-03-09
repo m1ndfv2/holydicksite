@@ -1,10 +1,12 @@
-FROM nginx:1.27-alpine
+FROM node:22-alpine
 
-WORKDIR /usr/share/nginx/html
+WORKDIR /app
+
+COPY package.json ./
+RUN npm install --omit=dev
 
 COPY . .
-COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 8080
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "start"]
