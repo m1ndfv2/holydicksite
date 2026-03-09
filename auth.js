@@ -43,6 +43,25 @@
   }
 
 
+
+  function cleanupLegacyTopbar() {
+    var legacyGuest = document.getElementById('account-chip');
+    if (legacyGuest) legacyGuest.remove();
+
+    var topLinks = document.querySelector('.top-links');
+    if (!topLinks) return;
+
+    var loginLinks = topLinks.querySelectorAll('a[href="login.html"], a[href="/login.html"]');
+    loginLinks.forEach(function (link) {
+      if (link !== authEntryLinkEl) link.remove();
+    });
+
+    var profileLinks = topLinks.querySelectorAll('a[href="profile.html"], a[href="/profile.html"]');
+    profileLinks.forEach(function (link) {
+      link.remove();
+    });
+  }
+
   function showProfileState() {
     if (profileGuestHintEl) profileGuestHintEl.hidden = isAuthenticated;
     if (profileHelloEl) profileHelloEl.hidden = !isAuthenticated;
@@ -152,6 +171,7 @@
     });
   }
 
+  cleanupLegacyTopbar();
   updateTopRightAuth('');
   showProfileState();
   checkSession();
