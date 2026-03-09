@@ -11,6 +11,10 @@
   var profileListEl = document.getElementById('profile-list');
 
   var isAuthenticated = false;
+  var userMenuWrapEl = null;
+  var userMenuButtonEl = null;
+  var userMenuDropdownEl = null;
+  var userMenuLogoutEl = null;
 
   function setStatus(message, isError) {
     if (!statusEl) return;
@@ -32,21 +36,80 @@
     });
   }
 
-  function updateTopRightAuth(username) {
-    if (!authEntryLinkEl) return;
+  function closeUserMenu() {
+    if (!userMenuWrapEl || !userMenuDropdownEl) return;
+    userMenuWrapEl.classList.remove('open');
+    userMenuDropdownEl.hidden = true;
+  }
 
+  function initUserMenu() {
+    if (!authEntryLinkEl) return;
+    var topLinks = authEntryLinkEl.parentElement;
+    if (!topLinks) return;
+
+    userMenuWrapEl = document.createElement('div');
+    userMenuWrapEl.className = 'auth-user-menu';
+    userMenuWrapEl.hidden = true;
+
+    userMenuButtonEl = document.createElement('button');
+    userMenuButtonEl.type = 'button';
+    userMenuButtonEl.className = 'discord-chip auth-user-button';
+    userMenuButtonEl.textContent = 'Игрок';
+
+    userMenuDropdownEl = document.createElement('div');
+    userMenuDropdownEl.className = 'auth-user-dropdown';
+    userMenuDropdownEl.hidden = true;
+
+    var profileLink = document.createElement('a');
+    profileLink.className = 'auth-user-item';
+    profileLink.href = 'profile.html';
+    profileLink.textContent = 'Профиль';
+
+    userMenuLogoutEl = document.createElement('button');
+    userMenuLogoutEl.type = 'button';
+    userMenuLogoutEl.className = 'auth-user-item auth-user-item-btn';
+    userMenuLogoutEl.textContent = 'Выйти';
+
+    userMenuDropdownEl.appendChild(profileLink);
+    userMenuDropdownEl.appendChild(userMenuLogoutEl);
+    userMenuWrapEl.appendChild(userMenuButtonEl);
+    userMenuWrapEl.appendChild(userMenuDropdownEl);
+    topLinks.appendChild(userMenuWrapEl);
+
+    userMenuButtonEl.addEventListener('click', function () {
+      var isOpen = userMenuWrapEl.classList.toggle('open');
+      userMenuDropdownEl.hidden = !isOpen;
+    });
+
+    document.addEventListener('click', function (event) {
+      if (!userMenuWrapEl || userMenuWrapEl.hidden) return;
+      if (userMenuWrapEl.contains(event.target)) return;
+      closeUserMenu();
+    });
+  }
+
+  function updateTopRightAuth(username) {
     if (isAuthenticated) {
-      authEntryLinkEl.textContent = username;
-      authEntryLinkEl.href = 'profile.html';
-      authEntryLinkEl.classList.add('account-link');
-    } else {
+      if (authEntryLinkEl) authEntryLinkEl.hidden = true;
+      if (userMenuWrapEl && userMenuButtonEl) {
+        userMenuButtonEl.textContent = username;
+        userMenuWrapEl.hidden = false;
+      }
+      return;
+    }
+
+    if (authEntryLinkEl) {
+      authEntryLinkEl.hidden = false;
       authEntryLinkEl.textContent = 'Вход';
       authEntryLinkEl.href = 'login.html';
       authEntryLinkEl.classList.remove('account-link');
     }
+
+    if (userMenuWrapEl) {
+      closeUserMenu();
+      userMenuWrapEl.hidden = true;
+    }
   }
-
-
 
   function cleanupLegacyTopbar() {
     var legacyGuest = document.getElementById('account-chip');
@@ -92,7 +155,6 @@
     updateTopRightAuth(username);
     updateProfile(username, lastLogin);
     showProfileState();
-    setStatus('Авторизация успешна.', false);
   }
 
   function setLoggedOut() {
@@ -108,6 +170,15 @@
     if (window.location.pathname.endsWith('/profile.html') || window.location.pathname === '/profile.html') {
       setStatus('Вы не авторизованы. Войдите, чтобы увидеть данные аккаунта.', false);
     }
+  }
+
+  async function doLogout() {
+    try {
+      await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
+    } catch (_) {}
+
+    setLoggedOut();
+    setStatus('Вы вышли из аккаунта.', false);
   }
 
   async function checkSession() {
@@ -156,7 +227,7 @@
         if (window.location.pathname.endsWith('/login.html') || window.location.pathname === '/login.html') {
           setTimeout(function () {
             window.location.href = 'profile.html';
-          }, 600);
+          }, 350);
         }
       } catch (_) {
         setStatus('Сервер недоступен.', true);
@@ -165,17 +236,12 @@
   }
 
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', async function () {
-      try {
-        await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
-      } catch (_) {}
-
-      setLoggedOut();
-      setStatus('Вы вышли из аккаунта.', false);
-    });
+    logoutBtn.addEventListener('click', doLogout);
   }
 
   cleanupLegacyTopbar();
+  initUserMenu();
+  if (userMenuLogoutEl) userMenuLogoutEl.addEventListener('click', doLogout);
   updateTopRightAuth('');
   showProfileState();
   checkSession();
