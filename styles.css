@@ -122,7 +122,7 @@ h1 span {
 
 .info-grid {
   display: grid;
-  grid-template-columns: minmax(270px, 520px);
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   gap: 1rem;
   padding-bottom: 2rem;
 }
@@ -334,3 +334,12 @@ h1 span {
 :root[data-theme='dark'] .rule-item summary::after { color: #dbe5fb; }
 :root[data-theme='dark'] .rule-content-inner,
 :root[data-theme='dark'] .rule-item-static h2 { border-color: rgba(255,255,255,.08); }
+
+
+.status-bad {
+  color: #b23b3b;
+}
+
+:root[data-theme='dark'] .status-bad {
+  color: #ff9b9b;
+}
