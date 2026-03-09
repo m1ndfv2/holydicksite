@@ -27,7 +27,13 @@
           </div>
           <button class="discord-chip theme-toggle" type="button" data-theme-toggle>🌙 Тёмная</button>
           <a class="discord-chip" href="rules.html">Правила</a>
+          <a class="discord-chip" href="login.html">Вход</a>
+          <a class="discord-chip" href="profile.html">Личный кабинет</a>
           <a class="discord-chip" href="https://discord.gg/tfH2hraDP7" target="_blank" rel="noopener noreferrer">Discord</a>
+          <div id="account-chip" class="account-chip">
+            <span class="account-chip-avatar">👤</span>
+            <span id="account-chip-name">Гость</span>
+          </div>
         </div>
       </nav>
 
@@ -40,7 +46,7 @@
 
       <div class="actions">
         <a class="btn btn-primary" href="https://discord.gg/tfH2hraDP7" target="_blank" rel="noopener noreferrer">Присоединиться в Discord</a>
-        <a class="btn btn-secondary" href="rules.html">Правила сервера</a>
+        <a class="btn btn-secondary" href="login.html">Страница входа</a>
       </div>
     </header>
 
@@ -56,35 +62,6 @@
         <p class="card-value"><span id="server-online-count">—</span> / <span id="server-online-max">—</span></p>
         <p id="server-online-status" class="card-text">Загрузка...</p>
       </article>
-      <article class="card auth-tabs-card">
-        <p class="card-label">Кабинет игрока</p>
-        <div class="auth-tabs" role="tablist" aria-label="Вкладки кабинета">
-          <button class="auth-tab-btn is-active" type="button" data-auth-tab="login" aria-selected="true">Вход</button>
-          <button class="auth-tab-btn" type="button" data-auth-tab="profile" aria-selected="false">Личный кабинет</button>
-        </div>
-      </article>
-      <article id="login-tab-panel" class="card tab-panel" data-tab-panel="login">
-        <p class="card-label">Авторизация</p>
-        <p id="auth-welcome" class="card-text" hidden></p>
-        <form id="login-form" class="login-form">
-          <input class="input" type="text" name="username" placeholder="Логин" autocomplete="username" required />
-          <input class="input" type="password" name="password" placeholder="Пароль" autocomplete="current-password" required />
-          <button class="btn btn-primary" type="submit">Войти</button>
-        </form>
-        <button id="logout-btn" class="btn btn-secondary" type="button" hidden>Выйти</button>
-        <p id="auth-status" class="card-text">Войдите с аккаунтом сервера.</p>
-      </article>
-      <article id="profile-tab-panel" class="card profile-card tab-panel" data-tab-panel="profile" hidden>
-        <p class="card-label">Личный кабинет</p>
-        <p id="profile-guest-hint" class="card-text">Войдите во вкладке «Вход», чтобы увидеть данные аккаунта.</p>
-        <h2 id="profile-hello" class="profile-hello" hidden>Добро пожаловать!</h2>
-        <ul id="profile-list" class="profile-list" hidden>
-          <li><span>Никнейм:</span> <strong id="profile-username">—</strong></li>
-          <li><span>Статус:</span> <strong>Игрок HolyDuck</strong></li>
-          <li><span>Последний вход:</span> <strong id="profile-login-time">—</strong></li>
-        </ul>
-      </article>
-
     </main>
 
     <footer class="container footer">© HolyDuck Community</footer>

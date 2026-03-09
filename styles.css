@@ -479,3 +479,12 @@ h1 span {
 :root[data-theme='dark'] .auth-tab-btn.is-active {
   color: #081526;
 }
+
+
+.single-column-grid {
+  grid-template-columns: minmax(280px, 700px);
+}
+
+.top-links .account-chip {
+  margin-left: auto;
+}
