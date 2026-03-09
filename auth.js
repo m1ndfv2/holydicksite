@@ -121,7 +121,7 @@
       if (!username || !password) {
         setStatus('Введите логин и пароль.', true);
         return;
-      }
+      }https://github.com/m1ndfv2/holydicksite/pull/23/conflict?name=index.html&ancestor_oid=c3ef9c81ef9632c08777e220579006c9d21b3d2b&base_oid=c2ee3502cfc21ee7e62b93589cfe0d9f271489cf&head_oid=6b66f42903ef64e8d484fe4f91e24faf059a7b05
 
       try {
         var res = await fetch('/api/login', {
