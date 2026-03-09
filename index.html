@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HolyDuck — демо сайт</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <p class="badge">Сделано по quickstart-подходу</p>
+      <h1>HolyDuck Site Starter</h1>
+      <p class="subtitle">
+        Готовый одностраничный сайт: быстрый старт, преимущества и блок подключения
+        HolyDuck.
+      </p>
+      <a class="btn" href="#connect">Подключить HolyDuck</a>
+    </header>
+
+    <main>
+      <section>
+        <h2>Что внутри</h2>
+        <div class="grid">
+          <article>
+            <h3>Быстрый запуск</h3>
+            <p>Откройте index.html или запустите любой локальный сервер.</p>
+          </article>
+          <article>
+            <h3>Готовая структура</h3>
+            <p>Hero-блок, карточки возможностей и секция с кодом интеграции.</p>
+          </article>
+          <article>
+            <h3>Чистый стек</h3>
+            <p>Только HTML/CSS/JS без сборщиков — удобно адаптировать под проект.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="connect">
+        <h2>Подключение HolyDuck</h2>
+        <p>
+          Вставьте ваш реальный код из документации Quickstart в блок ниже
+          (agent id / script URL / параметры).
+        </p>
+        <pre><code>&lt;!-- Замените на код из https://holyduck.documentationai.com/quickstart --&gt;
+&lt;script&gt;
+  window.HolyDuckConfig = {
+    project: "your-project-id",
+    locale: "ru"
+  };
+&lt;/script&gt;
+&lt;script src="https://cdn.example.com/holyduck-widget.js" defer&gt;&lt;/script&gt;</code></pre>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Документация: 
+        <a href="https://holyduck.documentationai.com/quickstart" target="_blank" rel="noreferrer">holyduck.documentationai.com/quickstart</a>
+      </p>
+    </footer>
+  </body>
+</html>
