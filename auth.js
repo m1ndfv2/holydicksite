@@ -15,6 +15,7 @@
   var userMenuButtonEl = null;
   var userMenuDropdownEl = null;
   var userMenuLogoutEl = null;
+  var userMenuAvatarEl = null;
 
   function setStatus(message, isError) {
     if (!statusEl) return;
@@ -54,7 +55,20 @@
     userMenuButtonEl = document.createElement('button');
     userMenuButtonEl.type = 'button';
     userMenuButtonEl.className = 'discord-chip auth-user-button';
-    userMenuButtonEl.textContent = 'Игрок';
+
+    userMenuAvatarEl = document.createElement('img');
+    userMenuAvatarEl.className = 'auth-user-avatar';
+    userMenuAvatarEl.alt = 'Скин игрока';
+    userMenuAvatarEl.width = 20;
+    userMenuAvatarEl.height = 20;
+    userMenuAvatarEl.hidden = true;
+
+    var userMenuText = document.createElement('span');
+    userMenuText.className = 'auth-user-name';
+    userMenuText.textContent = 'Игрок';
+
+    userMenuButtonEl.appendChild(userMenuAvatarEl);
+    userMenuButtonEl.appendChild(userMenuText);
 
     userMenuDropdownEl = document.createElement('div');
     userMenuDropdownEl.className = 'auth-user-dropdown';
@@ -88,11 +102,23 @@
     });
   }
 
-  function updateTopRightAuth(username) {
+  function updateTopRightAuth(username, skinHeadUrl) {
     if (isAuthenticated) {
       if (authEntryLinkEl) authEntryLinkEl.hidden = true;
       if (userMenuWrapEl && userMenuButtonEl) {
-        userMenuButtonEl.textContent = username;
+        var nameEl = userMenuButtonEl.querySelector('.auth-user-name');
+        if (nameEl) nameEl.textContent = username;
+
+        if (userMenuAvatarEl) {
+          if (skinHeadUrl) {
+            userMenuAvatarEl.src = skinHeadUrl;
+            userMenuAvatarEl.hidden = false;
+          } else {
+            userMenuAvatarEl.removeAttribute('src');
+            userMenuAvatarEl.hidden = true;
+          }
+        }
+
         userMenuWrapEl.hidden = false;
       }
       return;
@@ -141,7 +167,7 @@
     if (profileLoginTimeEl) profileLoginTimeEl.textContent = formatLastLogin(lastLogin);
   }
 
-  function setLoggedIn(username, lastLogin) {
+  function setLoggedIn(username, lastLogin, skinHeadUrl) {
     isAuthenticated = true;
 
     if (welcomeEl) {
@@ -152,7 +178,7 @@
     if (logoutBtn) logoutBtn.hidden = false;
     if (form) form.hidden = true;
 
-    updateTopRightAuth(username);
+    updateTopRightAuth(username, skinHeadUrl);
     updateProfile(username, lastLogin);
     showProfileState();
   }
@@ -164,7 +190,7 @@
     if (logoutBtn) logoutBtn.hidden = true;
     if (form) form.hidden = false;
 
-    updateTopRightAuth('');
+    updateTopRightAuth('', null);
     showProfileState();
 
     if (window.location.pathname.endsWith('/profile.html') || window.location.pathname === '/profile.html') {
@@ -194,7 +220,7 @@
       }
 
       var data = await res.json();
-      if (data.ok) setLoggedIn(data.username, data.lastLogin);
+      if (data.ok) setLoggedIn(data.username, data.lastLogin, data.skinHeadUrl);
     } catch (_) {
       setStatus('Не удалось проверить сессию.', true);
     }
@@ -226,7 +252,7 @@
           return;
         }
 
-        setLoggedIn(data.username, data.lastLogin);
+        setLoggedIn(data.username, data.lastLogin, data.skinHeadUrl);
         form.reset();
         if (window.location.pathname.endsWith('/login.html') || window.location.pathname === '/login.html') {
           setTimeout(function () {
@@ -246,7 +272,7 @@
   cleanupLegacyTopbar();
   initUserMenu();
   if (userMenuLogoutEl) userMenuLogoutEl.addEventListener('click', doLogout);
-  updateTopRightAuth('');
+  updateTopRightAuth('', null);
   showProfileState();
   checkSession();
 })();

@@ -546,3 +546,16 @@ h1 span {
 :root[data-theme='dark'] .auth-user-dropdown {
   background: #111a2e;
 }
+
+.auth-user-button {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+}
+
+.auth-user-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: .35rem;
+  image-rendering: pixelated;
+}

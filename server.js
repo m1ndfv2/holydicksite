@@ -26,6 +26,13 @@ const mysqlTable = process.env.MYSQL_TABLE || 'authme';
 const mysqlUsernameColumn = process.env.MYSQL_USERNAME_COLUMN || 'realname';
 const mysqlPasswordColumn = process.env.MYSQL_PASSWORD_COLUMN || 'password';
 const mysqlLastLoginColumn = process.env.MYSQL_LASTLOGIN_COLUMN || 'lastlogin';
+const minecraftDatabase = process.env.MYSQL_MINECRAFT_DATABASE || 'minecraft';
+const luckPermsTable = process.env.MYSQL_LUCKPERMS_TABLE || 'luckperms_players';
+const luckPermsUuidColumn = process.env.MYSQL_LUCKPERMS_UUID_COLUMN || 'uuid';
+const luckPermsUsernameColumn = process.env.MYSQL_LUCKPERMS_USERNAME_COLUMN || 'username';
+const skinsTable = process.env.MYSQL_SKINS_TABLE || 'Skins';
+const skinsIdentifierColumn = process.env.MYSQL_SKINS_IDENTIFIER_COLUMN || 'skin_identifier';
+const srPlayerSkinTable = process.env.MYSQL_SR_PLAYER_SKIN_TABLE || 'sr_player_skin';
 const sessionSecret = process.env.SESSION_SECRET || 'holydicksite-change-me';
 
 const pool = mysql.createPool({
@@ -89,15 +96,104 @@ function matchesAuthMeHash(password, hash) {
   return false;
 }
 
+function normalizeLastLogin(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 async function getUserByUsername(username) {
   const query = `SELECT \`${mysqlUsernameColumn}\` AS username, \`${mysqlPasswordColumn}\` AS password, \`${mysqlLastLoginColumn}\` AS lastLogin FROM \`${mysqlTable}\` WHERE \`${mysqlUsernameColumn}\` = ? LIMIT 1`;
   const [rows] = await pool.query(query, [username]);
   return rows[0] || null;
 }
 
-function normalizeLastLogin(value) {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : null;
+async function queryFirst(queries) {
+  for (const q of queries) {
+    try {
+      const [rows] = await pool.query(q.sql, q.params || []);
+      if (rows[0]) return rows[0];
+    } catch (_) {
+      // try next candidate schema
+    }
+  }
+  return null;
+}
+
+function normalizeUuid(uuid) {
+  if (!uuid) return null;
+  return String(uuid).replace(/-/g, '').toLowerCase();
+}
+
+function withHyphens(uuid) {
+  const clean = normalizeUuid(uuid);
+  if (!clean || clean.length !== 32) return null;
+  return `${clean.slice(0, 8)}-${clean.slice(8, 12)}-${clean.slice(12, 16)}-${clean.slice(16, 20)}-${clean.slice(20)}`;
+}
+
+async function resolveSkinHeadUrl(username) {
+  const lpRow = await queryFirst([
+    {
+      sql: `SELECT \`${luckPermsUuidColumn}\` AS uuid FROM \`${minecraftDatabase}\`.\`${luckPermsTable}\` WHERE \`${luckPermsUsernameColumn}\` = ? LIMIT 1`,
+      params: [username]
+    },
+    {
+      sql: `SELECT \`${luckPermsUuidColumn}\` AS uuid FROM \`${luckPermsTable}\` WHERE \`${luckPermsUsernameColumn}\` = ? LIMIT 1`,
+      params: [username]
+    }
+  ]);
+
+  const playerUuid = normalizeUuid(lpRow?.uuid);
+  if (!playerUuid) return null;
+
+  const skinRow = await queryFirst([
+    {
+      sql: `SELECT skin_identifier FROM \`${minecraftDatabase}\`.\`${srPlayerSkinTable}\` WHERE player_uuid = ? LIMIT 1`,
+      params: [playerUuid]
+    },
+    {
+      sql: `SELECT skin_identifier FROM \`${minecraftDatabase}\`.\`${srPlayerSkinTable}\` WHERE uuid = ? LIMIT 1`,
+      params: [withHyphens(playerUuid)]
+    },
+    {
+      sql: `SELECT skin_uuid FROM \`${minecraftDatabase}\`.\`${srPlayerSkinTable}\` WHERE player_uuid = ? LIMIT 1`,
+      params: [playerUuid]
+    }
+  ]);
+
+  const skinIdentifier = skinRow?.skin_identifier || skinRow?.skin_uuid;
+
+  if (skinIdentifier) {
+    const licensedRow = await queryFirst([
+      {
+        sql: `SELECT username FROM \`${minecraftDatabase}\`.\`${skinsTable}\` WHERE \`${skinsIdentifierColumn}\` = ? LIMIT 1`,
+        params: [skinIdentifier]
+      },
+      {
+        sql: `SELECT player_name FROM \`${minecraftDatabase}\`.\`${skinsTable}\` WHERE \`${skinsIdentifierColumn}\` = ? LIMIT 1`,
+        params: [skinIdentifier]
+      },
+      {
+        sql: `SELECT nick FROM \`${minecraftDatabase}\`.\`${skinsTable}\` WHERE \`${skinsIdentifierColumn}\` = ? LIMIT 1`,
+        params: [skinIdentifier]
+      }
+    ]);
+
+    const licensedNick = licensedRow?.username || licensedRow?.player_name || licensedRow?.nick;
+    if (licensedNick) {
+      return `https://minotar.net/helm/${encodeURIComponent(licensedNick)}/48`;
+    }
+  }
+
+  return `https://crafatar.com/avatars/${playerUuid}?size=48&overlay`;
+}
+
+async function buildAuthPayload(username) {
+  const user = await getUserByUsername(username);
+  return {
+    username,
+    lastLogin: normalizeLastLogin(user?.lastLogin),
+    skinHeadUrl: await resolveSkinHeadUrl(username)
+  };
 }
 
 app.post('/api/login', async (req, res) => {
@@ -121,8 +217,9 @@ app.post('/api/login', async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24
     });
 
-    return res.json({ ok: true, username: user.username, lastLogin: normalizeLastLogin(user.lastLogin) });
-  } catch (error) {
+    const payload = await buildAuthPayload(user.username);
+    return res.json({ ok: true, ...payload });
+  } catch (_) {
     return res.status(500).json({ ok: false, message: 'Ошибка подключения к базе данных.' });
   }
 });
@@ -137,14 +234,10 @@ app.get('/api/session', async (req, res) => {
   if (!username) return res.status(401).json({ ok: false });
 
   try {
-    const user = await getUserByUsername(username);
-    return res.json({
-      ok: true,
-      username,
-      lastLogin: normalizeLastLogin(user?.lastLogin)
-    });
+    const payload = await buildAuthPayload(username);
+    return res.json({ ok: true, ...payload });
   } catch (_) {
-    return res.json({ ok: true, username, lastLogin: null });
+    return res.json({ ok: true, username, lastLogin: null, skinHeadUrl: null });
   }
 });
 
