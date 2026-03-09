@@ -1,8 +1,8 @@
 :root {
-  --bg: #eff5ff;
-  --bg-soft: #f7faff;
-  --text: #15223b;
-  --muted: #4e5f7e;
+  --bg: #e7eefb;
+  --bg-soft: #f2f7ff;
+  --text: #0f1c35;
+  --muted: #3f5274;
   --line: rgba(28, 56, 102, 0.18);
   --accent: #6ea8ff;
   --accent-2: #73dfc8;
@@ -17,7 +17,7 @@ body {
   color: var(--text);
   background: radial-gradient(1400px 800px at 80% -10%, rgba(96, 148, 255, .28) 0%, transparent 55%),
               radial-gradient(1200px 600px at -10% 100%, rgba(96, 219, 183, .20) 0%, transparent 50%),
-              linear-gradient(180deg, #fbfdff 0%, var(--bg) 70%);
+              linear-gradient(180deg, #f7fbff 0%, var(--bg) 72%);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
@@ -52,13 +52,13 @@ body {
   padding-top: 1.6rem;
 }
 
-.brand { font-weight: 800; letter-spacing: .4px; font-size: 1.05rem; }
+.brand { font-weight: 800; letter-spacing: .4px; font-size: 1.05rem; color: #0f2b5b; }
 
 .discord-chip {
   color: #2a3a58;
   text-decoration: none;
   border: 1px solid var(--line);
-  background: rgba(255,255,255,.72);
+  background: rgba(255,255,255,.86);
   padding: .45rem .8rem;
   border-radius: 999px;
 }
@@ -86,7 +86,7 @@ h1 {
 }
 
 h1 span {
-  background: linear-gradient(90deg, #9ec1ff, #86ffe4);
+  background: linear-gradient(90deg, #5d8ff0, #2ed5b9);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -128,11 +128,12 @@ h1 span {
 }
 
 .card {
-  background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(240,246,255,.88));
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(238,246,255,.92));
   border: 1px solid var(--line);
   border-radius: 1rem;
   padding: 1.1rem;
   backdrop-filter: blur(6px);
+  box-shadow: 0 10px 28px rgba(38, 67, 120, .10);
 }
 
 .card-highlight { border-color: rgba(125, 255, 225, .45); }
@@ -324,6 +325,7 @@ h1 span {
   background: rgba(255,255,255,.04);
 }
 
+:root[data-theme='dark'] h1 span { background: linear-gradient(90deg, #9ec1ff, #86ffe4); -webkit-background-clip: text; background-clip: text; color: transparent; }
 :root[data-theme='dark'] .kicker { color: #9db6ff; }
 :root[data-theme='dark'] .btn-secondary { color: #dbe5fb; background: rgba(255,255,255,.03); }
 :root[data-theme='dark'] .card { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); }
