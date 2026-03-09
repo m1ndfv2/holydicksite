@@ -56,7 +56,14 @@
         <p class="card-value"><span id="server-online-count">—</span> / <span id="server-online-max">—</span></p>
         <p id="server-online-status" class="card-text">Загрузка...</p>
       </article>
-      <article class="card">
+      <article class="card auth-tabs-card">
+        <p class="card-label">Кабинет игрока</p>
+        <div class="auth-tabs" role="tablist" aria-label="Вкладки кабинета">
+          <button class="auth-tab-btn is-active" type="button" data-auth-tab="login" aria-selected="true">Вход</button>
+          <button class="auth-tab-btn" type="button" data-auth-tab="profile" aria-selected="false">Личный кабинет</button>
+        </div>
+      </article>
+      <article id="login-tab-panel" class="card tab-panel" data-tab-panel="login">
         <p class="card-label">Авторизация</p>
         <p id="auth-welcome" class="card-text" hidden></p>
         <form id="login-form" class="login-form">
@@ -67,10 +74,11 @@
         <button id="logout-btn" class="btn btn-secondary" type="button" hidden>Выйти</button>
         <p id="auth-status" class="card-text">Войдите с аккаунтом сервера.</p>
       </article>
-      <article id="profile-card" class="card profile-card" hidden>
+      <article id="profile-tab-panel" class="card profile-card tab-panel" data-tab-panel="profile" hidden>
         <p class="card-label">Личный кабинет</p>
-        <h2 id="profile-hello" class="profile-hello">Добро пожаловать!</h2>
-        <ul class="profile-list">
+        <p id="profile-guest-hint" class="card-text">Войдите во вкладке «Вход», чтобы увидеть данные аккаунта.</p>
+        <h2 id="profile-hello" class="profile-hello" hidden>Добро пожаловать!</h2>
+        <ul id="profile-list" class="profile-list" hidden>
           <li><span>Никнейм:</span> <strong id="profile-username">—</strong></li>
           <li><span>Статус:</span> <strong>Игрок HolyDuck</strong></li>
           <li><span>Последний вход:</span> <strong id="profile-login-time">—</strong></li>

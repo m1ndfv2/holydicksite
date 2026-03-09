@@ -5,12 +5,17 @@
   var logoutBtn = document.getElementById('logout-btn');
   var accountChipEl = document.getElementById('account-chip');
   var accountChipNameEl = document.getElementById('account-chip-name');
-  var profileCardEl = document.getElementById('profile-card');
   var profileHelloEl = document.getElementById('profile-hello');
   var profileUsernameEl = document.getElementById('profile-username');
   var profileLoginTimeEl = document.getElementById('profile-login-time');
+  var profileGuestHintEl = document.getElementById('profile-guest-hint');
+  var profileListEl = document.getElementById('profile-list');
+  var tabButtons = document.querySelectorAll('[data-auth-tab]');
+  var tabPanels = document.querySelectorAll('[data-tab-panel]');
 
   if (!form || !statusEl || !welcomeEl || !logoutBtn) return;
+
+  var isAuthenticated = false;
 
   function setStatus(message, isError) {
     statusEl.textContent = message;
@@ -27,37 +32,57 @@
     });
   }
 
+  function setActiveTab(tabName) {
+    tabButtons.forEach(function (button) {
+      var isActive = button.getAttribute('data-auth-tab') === tabName;
+      button.classList.toggle('is-active', isActive);
+      button.setAttribute('aria-selected', String(isActive));
+    });
+
+    tabPanels.forEach(function (panel) {
+      panel.hidden = panel.getAttribute('data-tab-panel') !== tabName;
+    });
+  }
+
+  function showProfileState() {
+    if (profileGuestHintEl) profileGuestHintEl.hidden = isAuthenticated;
+    if (profileHelloEl) profileHelloEl.hidden = !isAuthenticated;
+    if (profileListEl) profileListEl.hidden = !isAuthenticated;
+  }
+
   function updateAccountUi(username) {
     if (accountChipEl && accountChipNameEl) {
       accountChipNameEl.textContent = username;
       accountChipEl.hidden = false;
     }
 
-    if (profileCardEl) profileCardEl.hidden = false;
     if (profileHelloEl) profileHelloEl.textContent = 'Привет, ' + username + '!';
     if (profileUsernameEl) profileUsernameEl.textContent = username;
     if (profileLoginTimeEl) profileLoginTimeEl.textContent = getDateTimeLabel();
   }
 
-  function hideAccountUi() {
+  function clearAccountUi() {
     if (accountChipEl) accountChipEl.hidden = true;
-    if (profileCardEl) profileCardEl.hidden = true;
   }
 
   function setLoggedIn(username) {
+    isAuthenticated = true;
     welcomeEl.textContent = 'Вы вошли как: ' + username;
     welcomeEl.hidden = false;
     logoutBtn.hidden = false;
     form.hidden = true;
     updateAccountUi(username);
+    showProfileState();
     setStatus('Авторизация успешна.', false);
   }
 
   function setLoggedOut() {
+    isAuthenticated = false;
     welcomeEl.hidden = true;
     logoutBtn.hidden = true;
     form.hidden = false;
-    hideAccountUi();
+    clearAccountUi();
+    showProfileState();
   }
 
   async function checkSession() {
@@ -103,6 +128,7 @@
       }
 
       setLoggedIn(data.username);
+      setActiveTab('profile');
       form.reset();
     } catch (_) {
       setStatus('Сервер недоступен.', true);
@@ -115,8 +141,17 @@
     } catch (_) {}
 
     setLoggedOut();
+    setActiveTab('login');
     setStatus('Вы вышли из аккаунта.', false);
   });
 
+  tabButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      setActiveTab(button.getAttribute('data-auth-tab'));
+    });
+  });
+
+  setActiveTab('login');
+  showProfileState();
   checkSession();
 })();
