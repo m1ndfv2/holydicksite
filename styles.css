@@ -202,3 +202,16 @@ h1 span {
   color: var(--muted);
   line-height: 1.55;
 }
+
+
+.card-label-ip {
+  margin-top: 1rem;
+}
+
+.server-ip {
+  margin: .45rem 0 .2rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #9fd4ff;
+  letter-spacing: .02em;
+}
