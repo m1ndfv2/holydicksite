@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="theme.js" defer></script>
     <script src="server-status.js" defer></script>
+    <script src="auth.js" defer></script>
   </head>
   <body>
     <div class="bg-glow bg-glow-1"></div>
@@ -50,6 +51,17 @@
         <p class="card-label">Онлайн сервера</p>
         <p class="card-value"><span id="server-online-count">—</span> / <span id="server-online-max">—</span></p>
         <p id="server-online-status" class="card-text">Загрузка...</p>
+      </article>
+      <article class="card">
+        <p class="card-label">Авторизация</p>
+        <p id="auth-welcome" class="card-text" hidden></p>
+        <form id="login-form" class="login-form">
+          <input class="input" type="text" name="username" placeholder="Логин" autocomplete="username" required />
+          <input class="input" type="password" name="password" placeholder="Пароль" autocomplete="current-password" required />
+          <button class="btn btn-primary" type="submit">Войти</button>
+        </form>
+        <button id="logout-btn" class="btn btn-secondary" type="button" hidden>Выйти</button>
+        <p id="auth-status" class="card-text">Войдите с аккаунтом сервера.</p>
       </article>
 
     </main>
