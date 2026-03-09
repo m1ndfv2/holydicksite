@@ -186,3 +186,19 @@ h1 span {
 .rules-list li {
   margin-bottom: .45rem;
 }
+
+.rules-layout-single {
+  grid-template-columns: minmax(280px, 900px);
+}
+
+.rules-prose h2 {
+  margin: 0 0 .55rem;
+  font-size: 1.2rem;
+  color: #dce7ff;
+}
+
+.rules-prose p {
+  margin: 0 0 .8rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
