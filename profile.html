@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HolyDuck — Личный кабинет</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js" defer></script>
+    <script src="auth.js" defer></script>
+  </head>
+  <body>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <header class="container hero hero-rules">
+      <nav class="topbar">
+        <div class="brand">HolyDuck</div>
+        <div class="top-links">
+          <button class="discord-chip theme-toggle" type="button" data-theme-toggle>🌙 Тёмная</button>
+          <a class="discord-chip" href="index.html">Главная</a>
+          <a class="discord-chip" href="login.html">Вход</a>
+          <a class="discord-chip" href="rules.html">Правила</a>
+          <div id="account-chip" class="account-chip">
+            <span class="account-chip-avatar">👤</span>
+            <span id="account-chip-name">Гость</span>
+          </div>
+        </div>
+      </nav>
+
+      <p class="kicker">PROFILE</p>
+      <h1>Личный <span>кабинет</span></h1>
+    </header>
+
+    <main class="container info-grid single-column-grid">
+      <article id="profile-tab-panel" class="card profile-card tab-panel" data-tab-panel="profile">
+        <p class="card-label">Личный кабинет</p>
+        <p id="profile-guest-hint" class="card-text">Вы гость. Перейдите на страницу входа, чтобы увидеть данные аккаунта.</p>
+        <h2 id="profile-hello" class="profile-hello" hidden>Добро пожаловать!</h2>
+        <ul id="profile-list" class="profile-list" hidden>
+          <li><span>Никнейм:</span> <strong id="profile-username">—</strong></li>
+          <li><span>Статус:</span> <strong>Игрок HolyDuck</strong></li>
+          <li><span>Последний вход:</span> <strong id="profile-login-time">—</strong></li>
+        </ul>
+        <button id="logout-btn" class="btn btn-secondary" type="button" hidden>Выйти</button>
+        <p id="auth-status" class="card-text">Проверка статуса аккаунта...</p>
+      </article>
+    </main>
+  </body>
+</html>
