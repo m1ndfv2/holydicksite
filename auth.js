@@ -179,6 +179,10 @@
 
     setLoggedOut();
     setStatus('Вы вышли из аккаунта.', false);
+
+    setTimeout(function () {
+      window.location.href = 'index.html';
+    }, 250);
   }
 
   async function checkSession() {
