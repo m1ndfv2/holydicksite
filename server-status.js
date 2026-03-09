@@ -1,5 +1,5 @@
 (function () {
-  var endpoint = 'https://api.mcsrvstat.us/3/65.21.84.139:33069';
+  var endpoint = 'https://api.mcsrvstat.us/3/c11.play2go.cloud:20591';
   var onlineEl = document.getElementById('server-online-count');
   var maxEl = document.getElementById('server-online-max');
   var statusEl = document.getElementById('server-online-status');
