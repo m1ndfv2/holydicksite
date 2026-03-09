@@ -159,3 +159,30 @@ h1 span {
   color: #7d89a4;
   font-size: .9rem;
 }
+
+.top-links {
+  display: flex;
+  gap: .5rem;
+}
+
+.hero-rules {
+  min-height: auto;
+  padding-bottom: 1rem;
+}
+
+.rules-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+
+.rules-list {
+  margin: .6rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+}
+
+.rules-list li {
+  margin-bottom: .45rem;
+}
