@@ -344,6 +344,31 @@ h1 span {
 :root[data-theme='dark'] .rule-item-static h2 { border-color: rgba(255,255,255,.08); }
 
 
+.login-form {
+  display: grid;
+  gap: .55rem;
+  margin-top: .55rem;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: .65rem;
+  padding: .65rem .75rem;
+  font: inherit;
+  background: rgba(255,255,255,.65);
+  color: var(--text);
+}
+
+.btn {
+  cursor: pointer;
+}
+
+:root[data-theme='dark'] .input {
+  background: rgba(255,255,255,.04);
+}
+
+
 .status-bad {
   color: #b23b3b;
 }
