@@ -23,7 +23,7 @@ const mysqlConfig = {
 };
 
 const mysqlTable = process.env.MYSQL_TABLE || 'authme';
-const mysqlUsernameColumn = process.env.MYSQL_USERNAME_COLUMN || 'username';
+const mysqlUsernameColumn = process.env.MYSQL_USERNAME_COLUMN || 'realname';
 const mysqlPasswordColumn = process.env.MYSQL_PASSWORD_COLUMN || 'password';
 const sessionSecret = process.env.SESSION_SECRET || 'holydicksite-change-me';
 
