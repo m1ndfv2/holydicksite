@@ -4,6 +4,8 @@
   var welcomeEl = document.getElementById('auth-welcome');
   var logoutBtn = document.getElementById('logout-btn');
   var authEntryLinkEl = document.getElementById('auth-entry-link');
+  var navLoginLinkEl = document.getElementById('nav-login-link');
+  var navProfileLinkEl = document.getElementById('nav-profile-link');
   var profileHelloEl = document.getElementById('profile-hello');
   var profileUsernameEl = document.getElementById('profile-username');
   var profileLoginTimeEl = document.getElementById('profile-login-time');
@@ -42,6 +44,12 @@
     }
   }
 
+
+  function updateMainAuthLinks() {
+    if (navLoginLinkEl) navLoginLinkEl.hidden = isAuthenticated;
+    if (navProfileLinkEl) navProfileLinkEl.hidden = isAuthenticated;
+  }
+
   function showProfileState() {
     if (profileGuestHintEl) profileGuestHintEl.hidden = isAuthenticated;
     if (profileHelloEl) profileHelloEl.hidden = !isAuthenticated;
@@ -66,6 +74,7 @@
     if (form) form.hidden = true;
 
     updateTopRightAuth(username);
+    updateMainAuthLinks();
     updateProfile(username);
     showProfileState();
     setStatus('Авторизация успешна.', false);
@@ -79,6 +88,7 @@
     if (form) form.hidden = false;
 
     updateTopRightAuth('');
+    updateMainAuthLinks();
     showProfileState();
 
     if (window.location.pathname.endsWith('/profile.html') || window.location.pathname === '/profile.html') {
@@ -111,7 +121,7 @@
       if (!username || !password) {
         setStatus('Введите логин и пароль.', true);
         return;
-      }
+      }https://github.com/m1ndfv2/holydicksite/pull/23/conflict?name=index.html&ancestor_oid=c3ef9c81ef9632c08777e220579006c9d21b3d2b&base_oid=c2ee3502cfc21ee7e62b93589cfe0d9f271489cf&head_oid=6b66f42903ef64e8d484fe4f91e24faf059a7b05
 
       try {
         var res = await fetch('/api/login', {
@@ -152,6 +162,7 @@
   }
 
   updateTopRightAuth('');
+  updateMainAuthLinks();
   showProfileState();
   checkSession();
 })();

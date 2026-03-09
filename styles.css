@@ -495,10 +495,9 @@ h1 span {
 
 .auth-entry-link.account-link {
   font-weight: 700;
-  background: linear-gradient(90deg, #8fb8ff, #7dffe1);
-  color: #051021;
+  color: #2a3a58;
 }
 
 :root[data-theme='dark'] .auth-entry-link.account-link {
-  color: #081526;
+  color: #dbe7ff;
 }
