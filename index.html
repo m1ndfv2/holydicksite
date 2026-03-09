@@ -4,45 +4,49 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HolyDuck — Minecraft Server</title>
-    <meta
-      name="description"
-      content="Официальная стартовая страница Minecraft сервера HolyDuck. Версия: 1.21.11 Java."
-    />
+    <meta name="description" content="Современная стартовая страница Minecraft сервера HolyDuck" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="sky"></div>
-    <div class="noise"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
 
-    <header class="hero container">
-      <p class="badge">MINECRAFT SERVER</p>
-      <h1>HolyDuck</h1>
-      <p class="subtitle">
-        Добро пожаловать на стартовую страницу сервера. Заходи в игру, строй, выживай,
-        участвуй в ивентах и играй с комьюнити HolyDuck.
+    <header class="container hero">
+      <nav class="topbar">
+        <div class="brand">HolyDuck</div>
+        <a class="discord-chip" href="https://discord.gg/tfH2hraDP7" target="_blank" rel="noopener noreferrer">Discord</a>
+      </nav>
+
+      <p class="kicker">MINECRAFT COMMUNITY SERVER</p>
+      <h1>Играй на <span>HolyDuck</span><br />в современном стиле</h1>
+      <p class="lead">
+        Уютный сервер с активным комьюнити, ивентами и честным survival-геймплеем.
+        Подключайся и начинай играть уже сегодня.
       </p>
 
-      <div class="hero-panels">
-        <article class="panel">
-          <h2>Версия сервера</h2>
-          <p class="version">1.21.11 Java</p>
-          <p class="small">Убедись, что клиент запущен на этой версии.</p>
-        </article>
-
-        <article class="panel">
-          <h2>Discord</h2>
-          <p class="small">Новости, анонсы вайпов и поддержка игроков.</p>
-          <a class="discord-link" href="https://discord.gg/tfH2hraDP7" target="_blank" rel="noopener noreferrer">
-            Перейти в Discord: discord.gg/tfH2hraDP7
-          </a>
-        </article>
+      <div class="actions">
+        <a class="btn btn-primary" href="https://discord.gg/tfH2hraDP7" target="_blank" rel="noopener noreferrer">Присоединиться в Discord</a>
+        <a class="btn btn-secondary" href="#server">Информация о сервере</a>
       </div>
-
-      <a class="cta" href="https://discord.gg/tfH2hraDP7" target="_blank" rel="noopener noreferrer">Присоединиться к HolyDuck</a>
     </header>
 
-    <footer class="container footer">
-      <p>© HolyDuck Community</p>
-    </footer>
+    <main id="server" class="container info-grid">
+      <article class="card card-highlight">
+        <p class="card-label">Версия Minecraft</p>
+        <p class="card-value">1.21.11 Java</p>
+        <p class="card-text">Используй именно эту версию клиента для стабильного подключения к HolyDuck.</p>
+      </article>
+
+      <article class="card">
+        <p class="card-label">Discord-сервер</p>
+        <a class="card-link" href="https://discord.gg/tfH2hraDP7" target="_blank" rel="noopener noreferrer">discord.gg/tfH2hraDP7</a>
+        <p class="card-text">Новости, поддержка, наборы в команды и анонсы вайпов — всё в Discord.</p>
+      </article>
+    </main>
+
+    <footer class="container footer">© HolyDuck Community</footer>
   </body>
 </html>
