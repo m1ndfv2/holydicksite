@@ -49,7 +49,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 1.6rem;
+  padding-top: .9rem;
 }
 
 .brand { font-weight: 800; letter-spacing: .4px; font-size: 1.05rem; color: #0f2b5b; }
@@ -64,8 +64,8 @@ body {
 }
 
 .hero {
-  padding: 0 0 3rem;
-  min-height: 78vh;
+  padding: 0 0 1.25rem;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,7 +81,7 @@ body {
 
 h1 {
   margin: 0;
-  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  font-size: clamp(2rem, 5.2vw, 3.8rem);
   line-height: 1.05;
 }
 
@@ -95,11 +95,11 @@ h1 span {
 .lead {
   max-width: 700px;
   color: var(--muted);
-  font-size: clamp(1rem, 2.2vw, 1.22rem);
-  margin-top: 1rem;
+  font-size: clamp(1rem, 2vw, 1.14rem);
+  margin-top: .75rem;
 }
 
-.actions { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.4rem; }
+.actions { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1rem; }
 
 .btn {
   text-decoration: none;
@@ -123,8 +123,14 @@ h1 span {
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  gap: 1rem;
-  padding-bottom: 2rem;
+  gap: .85rem;
+  padding: .35rem 0 1.4rem;
+}
+
+@media (min-width: 980px) {
+  .info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .card {
