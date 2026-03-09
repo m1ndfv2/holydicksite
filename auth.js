@@ -18,13 +18,17 @@
     statusEl.classList.toggle('status-bad', Boolean(isError));
   }
 
-  function getDateTimeLabel() {
-    return new Date().toLocaleString('ru-RU', {
+  function formatLastLogin(lastLogin) {
+    var ms = Number(lastLogin);
+    if (!Number.isFinite(ms) || ms <= 0) return '—';
+
+    return new Date(ms).toLocaleString('ru-RU', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      second: '2-digit'
     });
   }
 
@@ -68,13 +72,13 @@
     if (profileListEl) profileListEl.hidden = !isAuthenticated;
   }
 
-  function updateProfile(username) {
+  function updateProfile(username, lastLogin) {
     if (profileHelloEl) profileHelloEl.textContent = 'Привет, ' + username + '!';
     if (profileUsernameEl) profileUsernameEl.textContent = username;
-    if (profileLoginTimeEl) profileLoginTimeEl.textContent = getDateTimeLabel();
+    if (profileLoginTimeEl) profileLoginTimeEl.textContent = formatLastLogin(lastLogin);
   }
 
-  function setLoggedIn(username) {
+  function setLoggedIn(username, lastLogin) {
     isAuthenticated = true;
 
     if (welcomeEl) {
@@ -86,7 +90,7 @@
     if (form) form.hidden = true;
 
     updateTopRightAuth(username);
-    updateProfile(username);
+    updateProfile(username, lastLogin);
     showProfileState();
     setStatus('Авторизация успешна.', false);
   }
@@ -115,7 +119,7 @@
       }
 
       var data = await res.json();
-      if (data.ok) setLoggedIn(data.username);
+      if (data.ok) setLoggedIn(data.username, data.lastLogin);
     } catch (_) {
       setStatus('Не удалось проверить сессию.', true);
     }
@@ -147,7 +151,7 @@
           return;
         }
 
-        setLoggedIn(data.username);
+        setLoggedIn(data.username, data.lastLogin);
         form.reset();
         if (window.location.pathname.endsWith('/login.html') || window.location.pathname === '/login.html') {
           setTimeout(function () {

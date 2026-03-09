@@ -25,6 +25,7 @@ const mysqlConfig = {
 const mysqlTable = process.env.MYSQL_TABLE || 'authme';
 const mysqlUsernameColumn = process.env.MYSQL_USERNAME_COLUMN || 'realname';
 const mysqlPasswordColumn = process.env.MYSQL_PASSWORD_COLUMN || 'password';
+const mysqlLastLoginColumn = process.env.MYSQL_LASTLOGIN_COLUMN || 'lastlogin';
 const sessionSecret = process.env.SESSION_SECRET || 'holydicksite-change-me';
 
 const pool = mysql.createPool({
@@ -89,9 +90,14 @@ function matchesAuthMeHash(password, hash) {
 }
 
 async function getUserByUsername(username) {
-  const query = `SELECT \`${mysqlUsernameColumn}\` AS username, \`${mysqlPasswordColumn}\` AS password FROM \`${mysqlTable}\` WHERE \`${mysqlUsernameColumn}\` = ? LIMIT 1`;
+  const query = `SELECT \`${mysqlUsernameColumn}\` AS username, \`${mysqlPasswordColumn}\` AS password, \`${mysqlLastLoginColumn}\` AS lastLogin FROM \`${mysqlTable}\` WHERE \`${mysqlUsernameColumn}\` = ? LIMIT 1`;
   const [rows] = await pool.query(query, [username]);
   return rows[0] || null;
+}
+
+function normalizeLastLogin(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
 }
 
 app.post('/api/login', async (req, res) => {
@@ -115,7 +121,7 @@ app.post('/api/login', async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24
     });
 
-    return res.json({ ok: true, username: user.username });
+    return res.json({ ok: true, username: user.username, lastLogin: normalizeLastLogin(user.lastLogin) });
   } catch (error) {
     return res.status(500).json({ ok: false, message: 'Ошибка подключения к базе данных.' });
   }
@@ -126,10 +132,20 @@ app.post('/api/logout', (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/api/session', (req, res) => {
+app.get('/api/session', async (req, res) => {
   const username = verifySession(req.cookies.hd_session);
   if (!username) return res.status(401).json({ ok: false });
-  return res.json({ ok: true, username });
+
+  try {
+    const user = await getUserByUsername(username);
+    return res.json({
+      ok: true,
+      username,
+      lastLogin: normalizeLastLogin(user?.lastLogin)
+    });
+  } catch (_) {
+    return res.json({ ok: true, username, lastLogin: null });
+  }
 });
 
 app.listen(port, () => {
